@@ -1,0 +1,97 @@
+@Microservices.Demo.Policies.Service_HostAddress = http://localhost:5182
+# @Microservices.Demo.Policies.Service_HostAddress = http://localhost:8083
+
+# Create an offer for a travel insurance policy whitout agent login
+POST {{Microservices.Demo.Policies.Service_HostAddress}}/api/offers
+Accept: application/json
+Content-Type: application/json
+{
+  "productCode": "TRI",
+  "policyFrom": "2024-06-11T12:00:00Z",
+  "policyTo": "2024-06-16T12:00:00Z",
+  "selectedCovers": ["C1", "C2", "C3"],
+  "answers": [
+    {
+      "questionCode": "NUM_OF_ADULTS",
+      "questionType": "Numeric",
+      "answer": 1
+    },
+    {
+      "questionCode": "NUM_OF_CHILDREN",
+      "questionType": "Numeric",
+      "answer": 1
+    },
+    {
+      "questionCode": "DESTINATION",
+      "questionType": "Text",
+      "answer": "EUR"
+    }
+  ]
+}
+###
+
+# Create an offer for a travel insurance policy with agent login
+POST {{Microservices.Demo.Policies.Service_HostAddress}}/api/offers
+Accept: application/json
+AgentLogin: Test
+Content-Type: application/json
+{
+  "productCode": "TRI",
+  "policyFrom": "2025-06-11T12:00:00Z",
+  "policyTo": "2025-06-16T12:00:00Z",
+  "selectedCovers": ["C1", "C2", "C3"],
+  "answers": [
+    {
+      "questionCode": "NUM_OF_ADULTS",
+      "questionType": "Numeric",
+      "answer": 1
+    },
+    {
+      "questionCode": "NUM_OF_CHILDREN",
+      "questionType": "Numeric",
+      "answer": 1
+    },
+    {
+      "questionCode": "DESTINATION",
+      "questionType": "Text",
+      "answer": "EUR"
+    }
+  ]
+}
+###
+
+# Create a policy from an offer
+POST {{Microservices.Demo.Policies.Service_HostAddress}}/api/policies
+Accept: application/json
+Content-Type: application/json
+{
+  "offerNumber": "697a1f26-544a-4e35-82a3-5be6dd90ceb9",
+  "policyHolder": {
+    "firstName": "Erick",
+    "lastName": "Arostegui Cunza",
+    "taxId": "123456"
+  },
+  "policyHolderAddress": {
+    "country": "España",
+    "zipCode": "08032",
+    "city": "Barcelona",
+    "street": "Barcelona"
+  }
+}
+###
+
+# Get a policy by its number
+GET {{Microservices.Demo.Policies.Service_HostAddress}}/api/policies/49300184-f8bc-407b-ade1-848b9a911f30
+Accept: application/json
+Content-Type: application/json
+###
+
+# Discontinue a policy
+DELETE {{Microservices.Demo.Policies.Service_HostAddress}}/api/policies/terminate
+Accept: application/json
+Content-Type: application/json
+{
+  "policyNumber": "bd8c5c6b-e520-4433-a10e-2b1f7a86f272",
+  "terminationDate": "2024-06-13"
+}
+###

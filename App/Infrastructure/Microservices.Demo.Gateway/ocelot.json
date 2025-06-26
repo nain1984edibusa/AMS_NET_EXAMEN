@@ -1,0 +1,107 @@
+﻿{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/gateway/products",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/api/products",
+      "DownstreamScheme": "http",
+      "ServiceName": "products.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/products/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/api/products/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "products.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/pricing",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/pricing",
+      "DownstreamScheme": "http",
+      "ServiceName": "pricing.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/pricing/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/pricing/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "pricing.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/offers",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/offers",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/offers/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/offers/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/policies/",
+      "UpstreamHttpMethod": [ "POST", "DELETE" ],
+      "DownstreamPathTemplate": "/api/policies",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/policies/{everything}",
+      "UpstreamHttpMethod": [ "POST", "DELETE" ],
+      "DownstreamPathTemplate": "/api/policies/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/policies/",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/policies",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.search.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/policies/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/policies/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/accounts/",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/accounts",
+      "DownstreamScheme": "http",
+      "ServiceName": "payments.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/accounts/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/accounts/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "payments.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/reports",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/api/reports",
+      "DownstreamScheme": "http",
+      "ServiceName": "reports.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/reports/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/api/reports/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "reports.service"
+    }
+  ],
+  "GlobalConfiguration": {
+    "ServiceDiscoveryProvider": {
+      "Type": "Eureka"
+    }
+  }
+}

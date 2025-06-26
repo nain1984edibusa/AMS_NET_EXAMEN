@@ -1,0 +1,28 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+               [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset$ | async) ? 'over' : 'side'"
+               [opened]="(isHandset$ | async) === false">
+    <mat-toolbar class="toolbar">
+      <a class="btn-title"
+         mat-button
+         routerLink="/insurance">
+        <mat-icon>menu</mat-icon>
+        <span class="title">Sales Portal</span>        
+      </a>
+    </mat-toolbar>
+    <app-nav></app-nav>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <app-header [isHandset$]="isHandset$"
+                [drawer]="drawer">
+    </app-header>
+    <div class="sidenav-scroll-wrapper">
+      <div class="sidenav-content">
+        <ng-content>
+          <router-outlet></router-outlet>
+        </ng-content>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

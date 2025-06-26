@@ -1,0 +1,30 @@
+@use '@angular/material' as mat;
+@use "./app/ui/insurance/shell/layout/insurance-shell-theme";
+
+@include mat.core();
+
+$theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$azure-palette,
+    tertiary: mat.$blue-palette,
+  ),
+  density: (
+    scale: 0,
+  )
+));
+
+:root {
+  --mdc-elevated-card-container-color: #fbf8fb !important;
+
+  @include mat.all-component-themes($theme);
+  @include insurance-shell-theme.theme($theme);
+  @include mat.color-variants-backwards-compatibility($theme);
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.w-100 {
+  width: 100%;
+}

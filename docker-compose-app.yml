@@ -1,0 +1,85 @@
+x-service: &service
+  deploy:
+      replicas: 1
+  restart: always
+  environment:
+    EUREKA__CLIENT__SERVICEURL: "http://eureka.server:8761/eureka"
+    EUREKA__INSTANCE__PORT: 8080
+    EUREKA__INSTANCE__PREFERIPADDRESS: true    
+  mem_limit: 256m
+  networks:
+    - backend
+
+services:
+  products.service:
+    <<: *service
+    build:
+      context: .
+      dockerfile: App/Services/Microservices.Demo.Product.Service/Dockerfile
+    image: products.service:1.0.0
+  reports.service:
+    <<: *service
+    build:
+      context: .
+      dockerfile: App/Services/Microservices.Demo.Reports.Service/Dockerfile
+    image: reports.service:1.0.0
+    # ports:
+    #   - "5263:8080"  # Opcional, para acceder desde fuera
+  pricing.service:
+    <<: *service
+    build:
+      context: .
+      dockerfile: App/Services/Microservices.Demo.Pricing.Service/Dockerfile
+    image: pricing.service:1.0.0
+  policies.service:
+    <<: *service
+    build:
+      context: .
+      dockerfile: App/Services/Microservices.Demo.Policies.Service/Dockerfile
+    image: policies.service:1.0.0    
+  policies.search.service:
+    <<: *service
+    build:
+      context: .
+      dockerfile: App/Services/Microservices.Demo.Policies.Search.Service/Dockerfile
+    image: policies.search.service:1.0.0    
+  payments.service:
+    <<: *service
+    build:
+      context: .
+      dockerfile: App/Services/Microservices.Demo.Payments.Service/Dockerfile
+    image: payments.service:1.0.0
+
+  client.angular:
+    container_name: client.angular
+    build:
+      context: App/Clients/ng-microservices-demo-client
+      dockerfile: Dockerfile
+    image: client.angular:1.0.0
+    environment:      
+      - PRODUCTS_URL=http://localhost:8990/gateway/products
+      - OFFERS_URL=http://localhost:8990/gateway/offers   
+      - POLICIES_URL=http://localhost:8990/gateway/policies   
+      - GATEWAY_URL=http://localhost:8990/gateway
+      - IDP_ISSUER=http://localhost:8992/realms/microservices-demo
+      - IDP_CLIENT_ID=client-angular
+      - IDP_REDIRECT_URI=http://localhost:8089
+      - IDP_RESPONSE_TYPE=code
+      - IDP_SCOPE=openid profile email
+      - IDP_POST_LOGOUT_REDIRECT_URI=http://localhost:8089
+      - IDP_STRICT_DISCOVERY_DOCUMENT_VALIDATION=false
+      - IDP_SHOW_DEBUG_INFORMATION=true  
+    restart: on-failure
+    ports:
+      - 8089:8080
+    networks:
+      - backend
+
+networks:
+  backend:
+    name: backend
+    driver: bridge
+
+
+
+#curl -X PUT "localhost:9200/policyreadmodel/_settings" -H 'Content-Type: application/json' -d '{"number_of_replicas": 0}'

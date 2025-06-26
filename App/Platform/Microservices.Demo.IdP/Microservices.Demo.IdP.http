@@ -1,0 +1,11 @@
+@Microservices.Demo.IdP_HostAddress = http://localhost:5058
+
+@Microservices.Demo.IdP_HostAddress = http://localhost:8992
+
+
+# Create an offer for a travel insurance policy with agent login
+POST http://localhost:8992/realms/microservices-demo/protocol/openid-connect/token
+Content-type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=client-angular&username=erick&password=Password1234
+###

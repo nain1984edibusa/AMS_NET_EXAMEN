@@ -1,0 +1,56 @@
+﻿{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/gateway/offers",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/offers",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.service",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiSecurityAuthenticationScheme"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/offers/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/offers/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.service",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiSecurityAuthenticationScheme"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/policies/",
+      "UpstreamHttpMethod": [ "POST", "DELETE" ],
+      "DownstreamPathTemplate": "/api/policies",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.service",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiSecurityAuthenticationScheme"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/policies/{everything}",
+      "UpstreamHttpMethod": [ "POST", "DELETE" ],
+      "DownstreamPathTemplate": "/api/policies/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.service",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiSecurityAuthenticationScheme"
+      }
+    }
+  ]
+}

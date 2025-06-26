@@ -1,0 +1,7 @@
+@Microservices.Demo.Payments.Service_HostAddress = http://localhost:5112
+
+GET {{Microservices.Demo.Payments.Service_HostAddress}}/api/accounts/b37680f4-4f02-4460-80fb-4bbb2691d502
+Accept: application/json
+Content-Type: application/json
+
+###

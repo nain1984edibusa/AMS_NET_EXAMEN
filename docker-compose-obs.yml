@@ -1,0 +1,106 @@
+services:  
+  prometheus:
+    image: prom/prometheus:v3.4.1
+    mem_limit: 128m
+    environment:
+      - '--web.enable-remote-write-receiver'
+      - '--web.enable-lifecycle'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=15d'    
+      - '--storage.tsdb.path=/data' 
+    volumes:
+      - ./App/Observability/Microservices.Demo.Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9091:9090"
+    networks:
+      - backend
+  health.checks.ui:
+    container_name: health.checks.ui
+    build:
+      context: .
+      dockerfile: App/Observability/Microservices.Demo.HealthChecks.UI/Dockerfile
+    image: health.checks.ui:1.0.0
+    restart: always
+    deploy:
+      replicas: 1
+    environment:
+      HealthChecksUI__HealthChecks__0__Name: Products.Service
+      HealthChecksUI__HealthChecks__0__Uri: http://products.service:8080/health
+      HealthChecksUI__HealthChecks__1__Name: Pricing.Service
+      HealthChecksUI__HealthChecks__1__Uri: http://pricing.service:8080/health
+      HealthChecksUI__HealthChecks__2__Name: Policies.Service
+      HealthChecksUI__HealthChecks__2__Uri: http://policies.service:8080/health
+      HealthChecksUI__HealthChecks__3__Name: Policies.Search.Service
+      HealthChecksUI__HealthChecks__3__Uri: http://policies.search.service:8080/health
+      HealthChecksUI__HealthChecks__4__Name: Payments.Service
+      HealthChecksUI__HealthChecks__4__Uri: http://payments.service:8080/health
+      HealthChecksUI__EvaluationTimeInSeconds: 3
+      HealthChecksUI__MinimumSecondsBetweenFailureNotifications: 30
+    #   SPRING__APPLICATION__NAME: Gateway
+    #   SPRING__CLOUD__TIMEOUT: 60000
+    #   SPRING__CLOUD__CONFIG__DISCOVERY__ENABLED: true
+    #   SPRING__CLOUD__CONFIG__DISCOVERY__SERVICEID: Config.Server
+    #   SPRING__CLOUD__CONFIG__RETRY__ENABLED: true
+    #   SPRING__CLOUD__CONFIG__FAILFAST: true
+    #   EUREKA__CLIENT__SERVICEURL: "http://eureka.server:8761/eureka"      
+    #   EUREKA__INSTANCE__APPNAME: "gateway"
+    #   EUREKA__INSTANCE__PORT: 8080
+    #   EUREKA__INSTANCE__PREFERIPADDRESS: true
+    ports:
+      - 8991:8080    
+    mem_limit: 256m
+    networks:
+      - backend
+  jaeger:    
+    image: jaegertracing/jaeger:2.6.0
+    ports:            
+      - "16686:16686"  # UI
+      - "4317:4317"   #OTLP gRPC
+      - "4318:4318"   #OTLP HTTP
+    environment:       
+      - QUERY__MENUENABLED=true
+    volumes:
+      - ./App/Observability/Microservices.Demo.Jaeger/config.yml:/etc/jaeger/config.yaml
+    command: ["--config", "/etc/jaeger/config.yaml"]
+    restart: on-failure
+    mem_limit: 128m
+    networks:
+      - backend
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:9.0.2
+    mem_limit: 768m
+    volumes:
+      - ./App/Observability/Microservices.Demo.ELK/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:      
+      - 5601:5601
+    networks:
+      - backend
+  apm-server:
+    container_name: apm-server
+    image: docker.elastic.co/apm/apm-server:9.0.2
+    mem_limit: 128m
+    ports:
+      - 8200:8200      
+    volumes:
+      - ./App/Observability/Microservices.Demo.ELK/apm/apm-server.yml:/usr/share/apm-server/apm-server.yml
+    networks:
+      - backend    
+    restart: on-failure
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash:9.0.2
+    mem_limit: 1g
+    ports:
+      - 5044:5044
+      - 28080:28080
+    volumes:
+      - ./App/Observability/Microservices.Demo.ELK/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./App/Observability/Microservices.Demo.ELK/logstash/conf.d:/usr/share/logstash/pipeline:ro
+    networks:
+      - backend
+networks:
+  backend:
+    name: backend
+    driver: bridge

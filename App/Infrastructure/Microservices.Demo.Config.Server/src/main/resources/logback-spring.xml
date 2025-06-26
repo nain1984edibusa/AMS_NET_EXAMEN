@@ -1,0 +1,17 @@
+<configuration debug="true">
+  <springProperty scope="context" name="SERVICE_NAME" source="service.name"/>
+  <springProperty scope="context" name="ENVIRONMENT" source="environment"/>
+
+  <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+    <destination>logstash:28081</destination>
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      <customFields>
+        {"Service":"${SERVICE_NAME}", "Environment":"${ENVIRONMENT}"}
+      </customFields>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="LOGSTASH"/>
+  </root>
+</configuration>

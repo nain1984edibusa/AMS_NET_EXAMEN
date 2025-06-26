@@ -1,0 +1,30 @@
+﻿{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/gateway/accounts/",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/accounts",
+      "DownstreamScheme": "http",
+      "ServiceName": "payments.service",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiSecurityAuthenticationScheme"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/accounts/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/accounts/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "payments.service",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiSecurityAuthenticationScheme"
+      }
+    }
+  ]
+}

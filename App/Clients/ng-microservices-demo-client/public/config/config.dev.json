@@ -1,0 +1,16 @@
+{
+  "PRODUCTS_URL": "http://localhost:8990/gateway/products",
+  "OFFERS_URL": "http://localhost:8990/gateway/offers",
+  "POLICIES_URL": "http://localhost:8990/gateway/policies",
+  "GATEWAY_URL": "http://localhost:8990/gateway",
+  "IDP": {
+    "ISSUER": "http://localhost:8992/realms/microservices-demo",
+    "CLIENT_ID": "client-angular",
+    "REDIRECT_URI": "http://localhost:4200",
+    "RESPONSE_TYPE": "code",
+    "SCOPE": "openid profile email",
+    "POST_LOGOUT_REDIRECT_URI": "http://localhost:4200",
+    "STRICT_DISCOVERY_DOCUMENT_VALIDATION": false,
+    "SHOW_DEBUG_INFORMATION": true
+  }
+}

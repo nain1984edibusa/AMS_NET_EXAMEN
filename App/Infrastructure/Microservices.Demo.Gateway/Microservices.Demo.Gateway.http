@@ -1,0 +1,257 @@
+@Microservices.Demo.Gateway_HostAddress = http://localhost:5058
+
+@Microservices.Demo.Gateway_HostAddress = http://localhost:8990
+
+@Identity_HostAddress = http://localhost:8992/realms/microservices-demo
+
+#Filter Jaeger
+#url.path="/gateway/products"
+
+
+# Identity Service - Get Token
+# @name tokenResponse
+POST {{Identity_HostAddress}}/protocol/openid-connect/token
+Content-type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=client-angular&username=erick&password=Password1234
+
+
+### Assign the token to a variable
+@token = {{tokenResponse.response.body.$.access_token}}
+
+
+### Get all products
+GET {{Microservices.Demo.Gateway_HostAddress}}/gateway/products
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Create a new product
+POST {{Microservices.Demo.Gateway_HostAddress}}/gateway/products
+Accept: application/json
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "code": "TRE",
+  "name": "Safe Traveller",
+  "image": "/static/travel.jpg",
+  "description": "Travel insurance",
+  "covers": [
+    {
+      "code": "C3",
+      "name": "Assistance",
+      "description": "",
+      "optional": true,
+      "sumInsured": null
+    },
+    {
+      "code": "C2",
+      "name": "Illness",
+      "description": "",
+      "optional": false,
+      "sumInsured": 5000
+    }
+  ],
+  "questions": [
+    {
+      "questionCode": "DESTINATION",
+      "index": 1,
+      "questionType": "Choice",
+      "text": "Destination",
+      "choices": [
+        {
+          "code": "AME",
+          "label": "America"
+        },
+        {
+          "code": "ES",
+          "label": "España"
+        },
+        {
+          "code": "PE",
+          "label": "Perú"
+        }
+      ]
+    },
+    {
+      "questionCode": "NUM_OF_ADULTS",
+      "index": 2,
+      "questionType": "Numeric",
+      "text": "Number of adults"
+    },
+    {
+      "questionCode": "NUM_OF_CHILDREN",
+      "index": 3,
+      "questionType": "Numeric",
+      "text": "Number of children"
+    }
+  ],
+  "maxNumberOfInsured": 10,
+  "icon": "plane"
+}
+
+### Get product by code
+GET {{Microservices.Demo.Gateway_HostAddress}}/gateway/products/TRI
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get product by id
+POST {{Microservices.Demo.Gateway_HostAddress}}/gateway/products/activate
+Accept: application/json
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "productId": "8d739c90-1caf-4391-9ffe-f7bdd6adf044"
+}
+
+### Discontinue a product
+POST {{Microservices.Demo.Gateway_HostAddress}}/gateway/products/discontinue
+Accept: application/json
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "productId": "8d739c90-1caf-4391-9ffe-f7bdd6adf044"
+}
+
+### Get Pricing
+POST {{Microservices.Demo.Gateway_HostAddress}}/gateway/pricing/calculate-price
+Accept: application/json
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "productCode": "TRI",
+  "policyFrom": "2024-06-11T12:00:00Z",
+  "policyTo": "2024-06-16T12:00:00Z",
+  "selectedCovers": ["C1", "C2", "C3"],
+  "answers": [
+    {
+      "questionCode": "NUM_OF_ADULTS",
+      "questionType": "Numeric",
+      "answer": 1
+    },
+    {
+      "questionCode": "NUM_OF_CHILDREN",
+      "questionType": "Numeric",
+      "answer": 1
+    },
+    {
+      "questionCode": "DESTINATION",
+      "questionType": "Text",
+      "answer": "EUR"
+    }
+  ]
+}
+
+### Create an offer for a travel insurance policy whitout agent login
+POST {{Microservices.Demo.Gateway_HostAddress}}/gateway/offers
+Accept: application/json
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "productCode": "TRI",
+  "policyFrom": "2024-06-11T12:00:00Z",
+  "policyTo": "2024-06-16T12:00:00Z",
+  "selectedCovers": ["C1", "C2", "C3"],
+  "answers": [
+    {
+      "questionCode": "NUM_OF_ADULTS",
+      "questionType": "Numeric",
+      "answer": 1
+    },
+    {
+      "questionCode": "NUM_OF_CHILDREN",
+      "questionType": "Numeric",
+      "answer": 1
+    },
+    {
+      "questionCode": "DESTINATION",
+      "questionType": "Text",
+      "answer": "EUR"
+    }
+  ]
+}
+
+### Create an offer for a travel insurance policy with agent login
+# @name offerResponse
+POST {{Microservices.Demo.Gateway_HostAddress}}/gateway/offers
+Accept: application/json
+Authorization: Bearer {{token}}
+AgentLogin: Test
+Content-Type: application/json
+{
+  "productCode": "TRI",
+  "policyFrom": "2025-06-11T12:00:00Z",
+  "policyTo": "2025-06-16T12:00:00Z",
+  "selectedCovers": ["C1", "C2", "C3"],
+  "answers": [
+    {
+      "questionCode": "NUM_OF_ADULTS",
+      "questionType": "Numeric",
+      "answer": 1
+    },
+    {
+      "questionCode": "NUM_OF_CHILDREN",
+      "questionType": "Numeric",
+      "answer": 1
+    },
+    {
+      "questionCode": "DESTINATION",
+      "questionType": "Text",
+      "answer": "EUR"
+    }
+  ]
+}
+
+### Assign the offer Number to a variable
+@offerNumber = {{offerResponse.response.body.$.offerNumber}}
+
+### Create a policy from an offer
+# @name policyResponse
+POST {{Microservices.Demo.Gateway_HostAddress}}/gateway/policies
+Accept: application/json
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "offerNumber": "{{offerNumber}}",
+  "policyHolder": {
+    "firstName": "Erick",
+    "lastName": "Arostegui Cunza",
+    "taxId": "123456"
+  },
+  "policyHolderAddress": {
+    "country": "España",
+    "zipCode": "08032",
+    "city": "Barcelona",
+    "street": "Barcelona"
+  }
+}
+
+### Assign the policy Number to a variable
+@policyNumber = {{policyResponse.response.body.$.number}}
+
+### Get a policy by its number
+GET {{Microservices.Demo.Gateway_HostAddress}}/gateway/policies/{{policyNumber}}
+Accept: application/json
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Terminate a policy
+DELETE {{Microservices.Demo.Gateway_HostAddress}}/gateway/policies/terminate
+Accept: application/json
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "policyNumber": "{{policyNumber}}",
+  "terminationDate": "2025-06-13"
+}
+
+### Find Policies
+GET {{Microservices.Demo.Gateway_HostAddress}}/gateway/policies?QueryText=Erick
+Accept: application/json
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Get Account by Number
+GET {{Microservices.Demo.Gateway_HostAddress}}/gateway/accounts/{{policyNumber}}
+Accept: application/json
+Authorization: Bearer {{token}}
+Content-Type: application/json

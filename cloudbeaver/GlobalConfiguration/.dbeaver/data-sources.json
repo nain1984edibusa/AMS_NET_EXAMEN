@@ -1,0 +1,103 @@
+{
+	"folders": {},
+	"connections": {
+		"microsoft-1972d3ec807-79acc4e6fc2ebe12": {
+			"provider": "sqlserver",
+			"driver": "microsoft",
+			"name": "SQL Server@sqlserver",
+			"save-password": true,
+			"configuration": {
+				"host": "sqlserver",
+				"port": "1433",
+				"database": "master",
+				"url": "jdbc:sqlserver://;serverName\u003dsqlserver;databaseName\u003dmaster",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "sqlserver_database",
+				"bootstrap": {
+					"autocommit": true
+				}
+			}
+		},
+		"postgres-jdbc-19730c4f5e0-5a933b52ecae2d2e": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "PostgreSQL@postgres",
+			"save-password": true,
+			"configuration": {
+				"host": "postgres",
+				"port": "5432",
+				"database": "postgres",
+				"url": "jdbc:postgresql://postgres:5432/postgres",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"provider-properties": {
+					"@dbeaver-show-non-default-db@": "true",
+					"@dbeaver-show-unavailable-db@": "true"
+				},
+				"auth-model": "native",
+				"bootstrap": {
+					"autocommit": true
+				}
+			}
+		},
+		"mysql8-19731405b19-3501dcb7cb1ffcd5": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "MySQL@mysql",
+			"save-password": true,
+			"configuration": {
+				"host": "mysql",
+				"port": "3306",
+				"url": "jdbc:mysql://mysql:3306/",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native",
+				"bootstrap": {
+					"autocommit": true
+				}
+			}
+		},
+		"postgres-jdbc-19763d97f19-67d62a92f45cc6f8": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "PostgreSQL@postgres-idp",
+			"save-password": true,
+			"configuration": {
+				"host": "postgres-idp",
+				"port": "5432",
+				"database": "postgres",
+				"url": "jdbc:postgresql://postgres-idp:5432/postgres",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"provider-properties": {
+					"@dbeaver-show-non-default-db@": "true"
+				},
+				"auth-model": "native",
+				"bootstrap": {
+					"autocommit": true
+				}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
+		}
+	}
+}

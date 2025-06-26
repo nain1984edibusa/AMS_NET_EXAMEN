@@ -1,0 +1,14 @@
+services:
+  microservices.demo.products.service:
+    image: ${DOCKER_REGISTRY-}microservicesdemoproductsservice
+    build:
+      context: .
+      dockerfile: App/Services/Microservices.Demo.Product.Service/Dockerfile
+    networks:
+      - backend
+
+networks:
+  backend:
+    name: backend
+    driver: bridge
+

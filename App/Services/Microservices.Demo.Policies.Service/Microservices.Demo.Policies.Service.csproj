@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.Kafka" Version="9.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="9.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.Prometheus.Metrics" Version="9.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="9.0.0" />
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.32.2" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1-Preview.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.3.efcore.9.0.0" />
+    <PackageReference Include="RestEase" Version="1.6.4" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.4.7" />
+    <PackageReference Include="Steeltoe.Discovery.Eureka" Version="3.2.8" />
+    <PackageReference Include="Steeltoe.Extensions.Configuration.ConfigServerCore" Version="3.2.8" />
+    <PackageReference Include="Steeltoe.Management.EndpointCore" Version="3.2.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Libs\Microservices.Infrastructure.Kafka\Microservices.Infrastructure.Kafka.csproj" />
+    <ProjectReference Include="..\..\..\Libs\Microservices.Infrastructure.Logger\Microservices.Infrastructure.Logger.csproj" />
+    <ProjectReference Include="..\..\..\Libs\Microservices.Infrastructure.Persistences\Microservices.Infrastructure.Persistences.csproj" />
+    <ProjectReference Include="..\..\..\Libs\Microservices.Infrastructure.Trace\Microservices.Infrastructure.Trace.csproj" />
+    <ProjectReference Include="..\..\..\Libs\Microservices.SharedKernel\Microservices.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\Messaging\Microservices.Demo.Messages\Microservices.Demo.Messages.csproj" />
+    <ProjectReference Include="..\..\RestClients\Microservices.Demo.RestClients\Microservices.Demo.RestClients.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Framework\Health\" />
+  </ItemGroup>
+
+</Project>

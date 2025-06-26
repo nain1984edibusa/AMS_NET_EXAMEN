@@ -1,0 +1,9 @@
+server.name: kibana
+server.host: 0.0.0.0
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+monitoring.ui.container.elasticsearch.enabled: true
+monitoring.ui.container.logstash.enabled: true
+elasticsearch.username: kibana_system
+elasticsearch.password: DnzgcgCnwfE1O-LR4lC9
+
+#bin/elasticsearch-reset-password -u kibana_system

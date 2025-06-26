@@ -1,0 +1,18 @@
+﻿{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/gateway/policies/",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/policies",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.search.service"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/policies/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/policies/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "policies.service"
+    }
+  ]
+}

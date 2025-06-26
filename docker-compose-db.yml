@@ -1,0 +1,92 @@
+services:
+    
+  sqlserver:
+    container_name: sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password1234    
+    ports:
+      - 1434:1433    
+    mem_limit: 2g
+    networks:
+      - backend 
+  mysql:
+    container_name: mysql
+    image: mysql:9.3.0
+    environment:
+      MYSQL_ROOT_PASSWORD: Password1234
+    ports:
+      - 3307:3306
+    mem_limit: 256m
+    networks:
+      - backend
+  postgres:
+    container_name: postgres
+    image: postgres:17.4
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password1234      
+    ports:
+      - 5433:5432
+    mem_limit: 128m
+    networks:
+      - backend
+  postgres-idp:
+    container_name: postgres-idp
+    image: postgres:17.4
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password1234
+    volumes:
+      - ./App/Platform/Microservices.Demo.IdP/PostgreSQL/data:/var/lib/postgresql/data
+    ports:
+      - 5434:5432
+    mem_limit: 128m
+    networks:
+      - backend 
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.0.2
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - ELASTIC_PASSWORD=elastic
+    volumes:
+      - ./App/Observability/Microservices.Demo.ELK/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./App/Observability/Microservices.Demo.ELK/elasticsearch/data:/usr/share/elasticsearch/data
+    mem_limit: 1g
+    networks:
+      - backend
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:25.0.3
+    container_name: cloudbeaver
+    volumes:
+      - ./cloudbeaver:/opt/cloudbeaver/workspace
+    ports:
+      - 8978:8978
+    mem_limit: 200m
+    networks:
+      - backend
+  elasticvue:
+    container_name: elasticvue
+    image: cars10/elasticvue:1.7.0
+    environment:
+      - ELASTICVUE_CLUSTERS=[{"name":"elasticsearch","uri":"http://localhost:9200","username":"elastic","password":"elastic"}]
+      # - ELASTICVUE_CLUSTERS=[{"name":"elasticsearch","uri":"http://localhost:9200"}]
+    networks:
+      - backend
+    mem_limit: 15m
+    ports:
+      - 9400:8080
+
+networks:
+  backend:
+    name: backend
+    driver: bridge
+
+
+
+#curl -X PUT "localhost:9200/policyreadmodel/_settings" -H 'Content-Type: application/json' -d '{"number_of_replicas": 0}'

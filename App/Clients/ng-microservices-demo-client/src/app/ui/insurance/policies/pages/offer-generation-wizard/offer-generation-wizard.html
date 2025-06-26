@@ -1,0 +1,264 @@
+<mat-stepper #stepper [linear]="true">
+  <!-- PASO 1: Selección de producto -->
+  <mat-step>
+    <ng-template matStepLabel>Select product</ng-template>
+    <div class="product-list">
+      @for (product of products; track product.id) {
+      <mat-card class="product-card" [class.selected]="selectedProduct?.id === product.id" (click)="selectProduct(product)">
+        <mat-card-header>
+          <mat-card-title>{{ product.name }}</mat-card-title>
+          <mat-card-subtitle>{{ product.description }}</mat-card-subtitle>
+        </mat-card-header>
+        @if (product.image) {
+        <img mat-card-image [src]="product.image" class="product-image" />
+        }
+      </mat-card>
+      }
+    </div>
+    <div>
+      <button mat-button matStepperNext [disabled]="!selectedProduct">Next</button>
+    </div>
+  </mat-step>
+
+  <!-- PASO 2: Coberturas -->
+  <mat-step>
+    <ng-template matStepLabel>Select covers</ng-template>
+    @if (selectedProduct) {
+    <h3>Choose your covers:</h3>
+    <mat-selection-list #coverList>
+      @for (cover of selectedProduct.covers; track cover.code) {
+      <mat-list-option [selected]="isCoverSelected(cover)"
+                       (click)="toggleCover(cover)">
+        {{ cover.name }} (
+        @if (cover.sumInsured != null) {
+        {{ cover.sumInsured | currency }}
+        } @else {
+        No sum insured
+        }
+        )
+      </mat-list-option>
+      }
+    </mat-selection-list>
+    }
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext [disabled]="selectedCovers.length === 0">Next</button>
+    </div>
+  </mat-step>
+
+  <!-- PASO 3: Preguntas (formulario reactivo) -->
+  <mat-step [stepControl]="answersForm">
+    <ng-template matStepLabel>Questions</ng-template>
+    @if (answersForm) {
+    <form [formGroup]="answersForm">
+      @for (question of questions; track question.questionCode) {
+      @switch (question.questionType) {
+      @case('Choice') {
+      @if (isChoiceQuestionModel(question)) {
+      <mat-form-field style="width: 100%;">
+        <mat-label>{{ question.text }}</mat-label>
+        <mat-select [formControlName]="question.questionCode" required>
+          @if ((question.choices ?? []).length > 0) {
+          @for (opt of (question.choices ?? []); track opt.code) {
+          <mat-option [value]="opt.code">
+            {{ opt.label }}
+          </mat-option>
+          }
+          }
+        </mat-select>
+      </mat-form-field>
+      }
+      }
+      @case ('Numeric') {
+      <mat-form-field style="width: 100%;">
+        <mat-label>{{ question.text }}</mat-label>
+        <input matInput type="number" [formControlName]="question.questionCode" required />
+      </mat-form-field>
+      }
+      @default {
+      <!-- Otros tipos de pregunta aquí -->
+      }
+      }
+      }
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext [disabled]="!answersForm.valid">Next</button>
+      </div>
+    </form>
+    }
+  </mat-step>
+
+  <!-- PASO 4: Fechas de la póliza -->
+  <mat-step [stepControl]="datesForm">
+    <ng-template matStepLabel>Policy dates</ng-template>
+    <form [formGroup]="datesForm" class="policy-dates-form">
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Start date</mat-label>
+        <input matInput [matDatepicker]="pickerFrom" formControlName="policyFrom" required>
+        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFrom></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>End date</mat-label>
+        <input matInput [matDatepicker]="pickerTo" formControlName="policyTo" required>
+        <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+        <mat-datepicker #pickerTo></mat-datepicker>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext [disabled]="!datesForm.valid">Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+
+  <!-- PASO 5: Calcular Precio -->
+  <mat-step>
+    <ng-template matStepLabel>Summary</ng-template>
+    <h3>Offer Summary</h3>
+    <div>
+      <p><b>Product:</b> {{ selectedProduct?.name }}</p>
+      <p><b>Covers:</b> {{ coversNames }}</p>
+      <p><b>Answers:</b></p>
+      <ul>
+        @for (q of questions; track q.questionCode) {
+        <li>
+          {{ q.text }}: {{ answersForm.value[q.questionCode] }}
+        </li>
+        }
+      </ul>
+      <p><b>Policy Date</b></p>
+      <ul>
+        <li>From: {{datesForm.value["policyFrom"] | date:'dd/MM/yyyy' }}</li>
+        <li>To: {{datesForm.value["policyTo"] | date:'dd/MM/yyyy' }}</li>
+      </ul>
+    </div>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-raised-button color="primary" (click)="submitOffer()">Calcule Price</button>
+    </div>
+  </mat-step>
+
+  <!-- PASO 6: Datos del tomador y dirección -->
+  <mat-step [stepControl]="holderForm">
+    <ng-template matStepLabel>Policy Holder</ng-template>
+    <form [formGroup]="holderForm" class="holder-form">
+      <!-- Oferta generada -->
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Offer Number</mat-label>
+        <input matInput [value]="calculatePrice?.offerNumber" disabled>
+      </mat-form-field>
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Total Price</mat-label>
+        <input matInput [value]="calculatePrice?.totalPrice | currency" disabled>
+      </mat-form-field>
+
+      <!-- Tomador -->
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Tax ID</mat-label>
+        <input matInput formControlName="taxId" required>
+      </mat-form-field>
+
+      <!-- Dirección -->
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Country</mat-label>
+        <input matInput formControlName="country" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Zip Code</mat-label>
+        <input matInput formControlName="zipCode" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>City</mat-label>
+        <input matInput formControlName="city" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Street</mat-label>
+        <input matInput formControlName="street" required>
+      </mat-form-field>
+
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-raised-button color="primary" [disabled]="!holderForm.valid" (click)="createPolicy()">Create Policy</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!--PASO 7: Datos de la poliza -->
+  <mat-step>
+    <ng-template matStepLabel>Policy Created</ng-template>
+    <div class="policy-summary">
+      <h2>Policy & Offer Summary</h2>
+      @if(summaryData){
+      <mat-card>
+        <mat-card-title>Policy Information</mat-card-title>
+        <mat-card-content>
+          <p><b>Policy Number:</b> {{ summaryData.policyNumber }}</p>
+          <p><b>Offer Number:</b> {{ summaryData.offerNumber }}</p>
+          <p><b>Product Code:</b> {{ summaryData.productCode }}</p>
+          @if (summaryData.policyHolder?.firstName) {
+          <p><b>Holder:</b> {{ summaryData.policyHolder.firstName }} {{ summaryData.policyHolder.lastName }}</p>
+          } @else {
+          <p><b>Holder:</b> {{ summaryData.policyHolder }}</p>
+          }
+          <p><b>Valid From:</b> {{ summaryData.validFrom | date:'dd/MM/yyyy' }}</p>
+          <p><b>Valid To:</b> {{ summaryData.validTo | date:'dd/MM/yyyy' }}</p>
+          <p><b>Total Premium:</b> {{ summaryData.totalPremium | currency }}</p>
+          <p><b>Total Price (Offer):</b> {{ summaryData.totalPrice | currency }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card style="margin-top: 16px;">
+        <mat-card-title>Covers and Prices</mat-card-title>
+        <mat-card-content>
+          @if (summaryData.covers?.length > 0) {
+          <ul>
+            @for (code of summaryData.covers; track code) {
+            <li>{{ code }}</li>
+            }
+          </ul>
+          } @else {
+          <p>No covers selected.</p>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      @if (summaryData.offerAnswers?.length > 0) {
+      <mat-card style="margin-top: 16px;">
+        <mat-card-title>Answers</mat-card-title>
+        <mat-card-content>
+          <ul>
+            @for (a of summaryData.offerAnswers; track a.questionCode) {
+            <li>
+              {{ a.questionCode }}: {{ a.answer }}
+            </li>
+            }
+          </ul>
+        </mat-card-content>
+      </mat-card>
+      }
+      }
+       <div class="summary-actions">
+        <button mat-flat-button color="primary" (click)="restartWizard()">
+          Start New Policy
+        </button>
+        <!-- O puedes hacer un botón para ir a home:
+        <button mat-flat-button color="accent" (click)="goHome()">
+          Go to Home
+        </button>
+        -->
+      </div>
+
+    </div>
+
+  </mat-step>
+
+</mat-stepper>
