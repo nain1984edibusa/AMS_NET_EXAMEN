@@ -76,6 +76,12 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ng-microservices-demo-clien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microservices.Demo.Reports.Service", "App\Services\Microservices.Demo.Reports.Service\Microservices.Demo.Reports.Service.csproj", "{8D0356C2-14A3-B4A5-EF4D-3C92A543DC7C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServicesReport", "ServicesReport", "{E4907E03-9737-4164-A1BC-00894C02E5E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMinimalApi", "App\ServicesReport\MyMinimalApi\MyMinimalApi.csproj", "{A68A5D93-153B-3C06-76B7-253BA736A963}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microservices.Demo.Reports.Service", "App\ServicesReport\Microservices.Demo.Reports.Service\Microservices.Demo.Reports.Service.csproj", "{2788ED79-0A7D-BA49-1857-1B850528CEC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -184,6 +190,14 @@ Global
 		{8D0356C2-14A3-B4A5-EF4D-3C92A543DC7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D0356C2-14A3-B4A5-EF4D-3C92A543DC7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D0356C2-14A3-B4A5-EF4D-3C92A543DC7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A68A5D93-153B-3C06-76B7-253BA736A963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A68A5D93-153B-3C06-76B7-253BA736A963}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A68A5D93-153B-3C06-76B7-253BA736A963}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A68A5D93-153B-3C06-76B7-253BA736A963}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2788ED79-0A7D-BA49-1857-1B850528CEC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2788ED79-0A7D-BA49-1857-1B850528CEC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2788ED79-0A7D-BA49-1857-1B850528CEC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2788ED79-0A7D-BA49-1857-1B850528CEC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -221,6 +235,9 @@ Global
 		{CD987786-69DF-49BB-8E6F-33A0B4018810} = {FA026AD7-DBC3-4B1A-AC0C-02CEEDC519DD}
 		{3FB60F23-043D-BDA9-4771-440E3C761CDE} = {45BC4B56-25A8-4816-BC85-36A75ECBC436}
 		{8D0356C2-14A3-B4A5-EF4D-3C92A543DC7C} = {6EA1BDD9-8F99-4176-8D3B-CA4624EBD58B}
+		{E4907E03-9737-4164-A1BC-00894C02E5E9} = {FBBAD7A6-A733-4E9A-AE4E-5C92F631CA49}
+		{A68A5D93-153B-3C06-76B7-253BA736A963} = {E4907E03-9737-4164-A1BC-00894C02E5E9}
+		{2788ED79-0A7D-BA49-1857-1B850528CEC7} = {E4907E03-9737-4164-A1BC-00894C02E5E9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {887E77AF-DF1F-4B9B-83E8-7A3B9A11A34F}
