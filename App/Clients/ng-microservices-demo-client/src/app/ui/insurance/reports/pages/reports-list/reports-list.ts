@@ -13,7 +13,8 @@ import { PolicyReport } from '../../../interfaces/policyReport.interface';
 })
 export class ReportsList {
 
-   displayedColumns: string[] = ['policyNumber', 'productCode', 'descripcionCode'];
+  //displayedColumns: string[] = ['policyNumber', 'productCode', 'descripcionCode'];
+  displayedColumns: string[] = ['policyNumber', 'productCode', 'descripcionCode', 'holderFirstName', 'holderLastName', 'holderStreet', 'holderCountry', 'holderCity', 'holderZipCode'];
   // dataSource = [
   //   { policyNumber: '0102030405', productCode: 'Bustillos Tapia', descripcionCode: 'Eduardo Andrés' },
   //   { policyNumber: '0607080910', productCode: 'Tapia Cueva', descripcionCode: 'Freddy Rolando' },

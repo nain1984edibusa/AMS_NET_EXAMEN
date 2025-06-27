@@ -1,5 +1,10 @@
-<p>reports-list works ups!</p>
-<p>reports-list works ups prueba </p>
+<!-- <p>reports-list works ups!</p>
+<p>reports-list works ups prueba </p> -->
+
+<div class="">
+  <legend><i class="fa fa-envelope-open"></i> &nbsp; <b> List Policies </b></legend>
+</div>
+<br>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-full">
 
   <ng-container matColumnDef="policyNumber">
@@ -16,6 +21,33 @@
     <th mat-header-cell *matHeaderCellDef>Description</th>
     <td mat-cell *matCellDef="let row">{{ row.descripcionCode }}</td>
   </ng-container>
+
+ <ng-container matColumnDef="holderFirstName">
+    <th mat-header-cell *matHeaderCellDef>First Name</th>
+    <td mat-cell *matCellDef="let row">{{ row.holderFirstName }}</td>
+  </ng-container>
+    
+  <ng-container matColumnDef="holderLastName">
+    <th mat-header-cell *matHeaderCellDef>LastName</th>
+    <td mat-cell *matCellDef="let row">{{ row.holderLastName }}</td>
+  </ng-container>
+<ng-container matColumnDef="holderStreet">
+    <th mat-header-cell *matHeaderCellDef>Street</th>
+    <td mat-cell *matCellDef="let row">{{ row.holderStreet }}</td>
+  </ng-container>
+  <ng-container matColumnDef="holderCountry">
+    <th mat-header-cell *matHeaderCellDef>Country</th>
+    <td mat-cell *matCellDef="let row">{{ row.holderCountry }}</td>
+  </ng-container>
+  <ng-container matColumnDef="holderCity">
+    <th mat-header-cell *matHeaderCellDef>City</th>
+    <td mat-cell *matCellDef="let row">{{ row.holderCity }}</td>
+  </ng-container>
+  <ng-container matColumnDef="holderZipCode">
+    <th mat-header-cell *matHeaderCellDef>ZipCode</th>
+    <td mat-cell *matCellDef="let row">{{ row.holderZipCode }}</td>
+  </ng-container> 
+
 
   <!-- Estas dos líneas son necesarias -->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
