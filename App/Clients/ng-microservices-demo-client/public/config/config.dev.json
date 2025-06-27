@@ -1,5 +1,6 @@
 {
   "PRODUCTS_URL": "http://localhost:8990/gateway/products",
+  "REPORTS_URL": "http://localhost:8990/gateway/reports",
   "OFFERS_URL": "http://localhost:8990/gateway/offers",
   "POLICIES_URL": "http://localhost:8990/gateway/policies",
   "GATEWAY_URL": "http://localhost:8990/gateway",

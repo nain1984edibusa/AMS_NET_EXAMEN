@@ -8,9 +8,6 @@
       "ServiceName": "reports.service",
       "LoadBalancerOptions": {
         "Type": "RoundRobin"
-      },
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "ApiSecurityAuthenticationScheme"
       }
     },
     {
@@ -21,9 +18,6 @@
       "ServiceName": "reports.service",
       "LoadBalancerOptions": {
         "Type": "RoundRobin"
-      },
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "ApiSecurityAuthenticationScheme"
       }
     }
   ]

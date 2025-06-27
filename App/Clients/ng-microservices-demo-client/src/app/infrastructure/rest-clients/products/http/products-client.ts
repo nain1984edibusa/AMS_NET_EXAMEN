@@ -18,6 +18,7 @@ export class ProductsClient {
   }
 
   public async getAllProducts(): Promise<GetAllProductsResponse> {
+    debugger
     return await firstValueFrom(this.http.get<GetAllProductsResponse>(this.productsUrl).pipe(catchError(this.handleError)));
   }
 
